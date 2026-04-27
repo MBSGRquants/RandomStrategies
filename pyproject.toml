@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "random-strategies"
+version = "0.1.0"
+description = "Monte Carlo simulation to validate portfolio concentration thesis on B500 universe"
+authors = ["NicolaPaghera"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.0.0"
+numpy = "^2.0.0"
+matplotlib = "^3.9.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^6.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

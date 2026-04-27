@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth *)",
+      "Bash(gh org *)",
+      "Bash(gh repo *)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(git clone *)",
+      "Bash(gh issue *)",
+      "Read(//c/Users/BUSGR025/Desktop/local_code//**)",
+      "Read(//c/Users/BUSGR025/Desktop/local_code/portfolio_lib//**)",
+      "Bash(pip show *)",
+      "Bash(mkdir -p /c/Users/BUSGR025/Desktop/local_code/RandomStrategies/random_strategies)",
+      "Bash(mkdir -p /c/Users/BUSGR025/Desktop/local_code/RandomStrategies/tests)",
+      "Bash(mkdir -p /c/Users/BUSGR025/Desktop/local_code/RandomStrategies/output)",
+      "Bash(python *)",
+      "Bash(pip install *)"
+    ]
+  }
+}
