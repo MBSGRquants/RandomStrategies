@@ -20,7 +20,8 @@
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\BUSGR025\\\\Desktop\\\\local_code\\\\RandomStrategies\" -Force | ForEach-Object { $_.Name })",
       "PowerShell(C:\\\\Users\\\\BUSGR025\\\\Anaconda3\\\\envs\\\\Python3_11_7\\\\python.exe -m venv \"C:\\\\Users\\\\BUSGR025\\\\Desktop\\\\local_code\\\\RandomStrategies\\\\.venv\" 2>&1)",
       "PowerShell(poetry env *)",
-      "PowerShell(poetry install *)"
+      "PowerShell(poetry install *)",
+      "Bash(git config *)"
     ]
   }
 }
