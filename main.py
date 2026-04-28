@@ -13,7 +13,7 @@ from portfolio_lib import NavEngine
 from random_strategies.simulation import (
     SimulationResult, _get_rebalancing_dates, FREQ_RESAMPLE,
 )
-from random_strategies.visualization import plot_fan_chart, build_summary_table, save_mean_navs
+from random_strategies.visualization import plot_fan_chart, build_summary_table, save_mean_navs, save_all_navs
 
 
 # ── Parameters ────────────────────────────────────────────────────────────────
@@ -110,4 +110,5 @@ for result in results:
 
 mean_navs = save_mean_navs(results, OUTPUT_DIR)
 summary   = build_summary_table(results, OUTPUT_DIR)
+save_all_navs(results, OUTPUT_DIR)
 print(summary.to_string(index=False))

@@ -1,4 +1,5 @@
 import os
+import pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -55,6 +56,20 @@ def save_mean_navs(results: list[SimulationResult], output_dir: str) -> pd.DataF
     )
     df.to_csv(os.path.join(output_dir, "mean_navs.csv"))
     return df
+
+
+def save_all_navs(results: list[SimulationResult], output_dir: str) -> None:
+    """Pickle: dict keyed by (N, freq) → DataFrame with columns sim_0..sim_K-1, mean, benchmark."""
+    os.makedirs(output_dir, exist_ok=True)
+    data = {}
+    for r in results:
+        df = pd.concat(r.nav_list, axis=1)
+        df.columns = [f"sim_{k}" for k in range(len(r.nav_list))]
+        df["mean"] = r.mean_nav
+        df["benchmark"] = r.benchmark_nav
+        data[(r.N, r.freq)] = df
+    with open(os.path.join(output_dir, "all_navs.pkl"), "wb") as f:
+        pickle.dump(data, f)
 
 
 def build_summary_table(results: list[SimulationResult], output_dir: str) -> pd.DataFrame:

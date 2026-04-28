@@ -9,6 +9,8 @@ python = "^3.10"
 pandas = "^2.0.0"
 numpy = "^2.0.0"
 matplotlib = "^3.9.0"
+tqdm = "^4.0.0"
+portfolio-lib = {path = "../portfolio_lib"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
