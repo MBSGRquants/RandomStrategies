@@ -33,13 +33,13 @@ def plot_fan_chart(result: SimulationResult, output_dir: str) -> str:
     ax.plot(result.mean_nav.index, result.mean_nav.values,
             color=COLORS["dark_blue"], linewidth=2, label=f"Mean of {result.K} random")
 
-    ax.set_title(f"Fan Chart — N={result.N}, freq={result.freq}, K={result.K}")
+    ax.set_title(f"Fan Chart — N={result.N}, freq={result.freq}, weighting={result.weighting}, K={result.K}")
     ax.set_xlabel("Date")
     ax.set_ylabel("NAV")
     ax.legend()
     fig.tight_layout()
 
-    path = os.path.join(output_dir, f"{result.N}_{result.freq}_fan_chart.png")
+    path = os.path.join(output_dir, f"{result.N}_{result.freq}_{result.weighting}_fan_chart.png")
     fig.savefig(path, dpi=150)
     plt.close(fig)
     return path
@@ -50,7 +50,7 @@ def save_mean_navs(results: list[SimulationResult], output_dir: str) -> pd.DataF
     os.makedirs(output_dir, exist_ok=True)
     df = pd.concat(
         {"bench_EW": results[0].benchmark_nav} |
-        {f"N{r.N}_{r.freq}": r.mean_nav for r in results},
+        {f"N{r.N}_{r.freq}_{r.weighting}": r.mean_nav for r in results},
         axis=1,
     )
     df.to_csv(os.path.join(output_dir, "mean_navs.csv"))
@@ -66,6 +66,7 @@ def build_summary_table(results: list[SimulationResult], output_dir: str) -> pd.
         rows.append({
             "N": r.N,
             "freq": r.freq,
+            "weighting": r.weighting,
             "mean_return": np.mean(ret_list),
             "median_return": np.median(ret_list),
             "p5_return": np.percentile(ret_list, 5),

@@ -28,6 +28,7 @@ class SimulationResult:
     freq: str
     K: int
     seed: int
+    weighting: str = "equal"
 
 
 def _get_rebalancing_dates(date_index: pd.DatetimeIndex, freq: str) -> pd.DatetimeIndex:

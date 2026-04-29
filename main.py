@@ -22,12 +22,13 @@ from random_strategies.visualization import plot_fan_chart, build_summary_table,
 # FREQ_LIST  = ["daily", "monthly", "quarterly", "semiannual", "annual"]
 # K          = 1000
 
-N_LIST     = [40, 100]
-FREQ_LIST  = ["monthly", "quarterly", "semiannual", "annual"]
-K          = 10000
-SEED       = 42
-OUTPUT_DIR = "output/"
-START_YEAR = 2015
+N_LIST       = [40, 100]
+FREQ_LIST    = ["monthly", "quarterly", "semiannual", "annual"]
+WEIGHT_LIST  = ["equal", "cap"]
+K            = 10000
+SEED         = 42
+OUTPUT_DIR   = "output/"
+START_YEAR   = 2015
 # ── Load data ─────────────────────────────────────────────────────────────────
 
 _data          = load_data(category="stock", universe="B500")
@@ -76,9 +77,10 @@ for N in N_LIST:
         }
 
         # Pre-generate all K×n_rebal selections upfront (vectorized per date)
-        ticker_to_idx  = {t: i for i, t in enumerate(tickers)}
-        n_rebal        = len(rebal_dates)
-        j_idx          = np.repeat(np.arange(n_rebal), N)  # row indices for fancy indexing
+        ticker_to_idx     = {t: i for i, t in enumerate(tickers)}
+        n_rebal           = len(rebal_dates)
+        j_idx             = np.repeat(np.arange(n_rebal), N)
+        bench_weights_mat = bench_at_rebal.values  # (n_rebal, n_tickers)
 
         # all_selections[j, k, :] = N global ticker indices for sim k at rebal date j
         all_selections = np.empty((n_rebal, K, N), dtype=np.intp)
@@ -88,20 +90,31 @@ for N in N_LIST:
             perms      = rng.permuted(np.tile(np.arange(len(active)), (K, 1)), axis=1)
             all_selections[j] = active_idx[perms[:, :N]]  # (K, N) global indices
 
-        nav_list = []
-        for k in tqdm(range(K), desc=f"N={N} freq={freq}"):
-            w = np.zeros((n_rebal, len(tickers)))
-            w[j_idx, all_selections[:, k, :].ravel()] = 1.0 / N
-            nav_list.append(engine.calc(pd.DataFrame(w, index=rebal_dates, columns=tickers)).daily)
+        for weighting in WEIGHT_LIST:
+            nav_list = []
+            for k in tqdm(range(K), desc=f"N={N} freq={freq} {weighting}"):
+                w   = np.zeros((n_rebal, len(tickers)))
+                sel = all_selections[:, k, :]  # (n_rebal, N)
 
-        mean_nav = pd.concat(nav_list, axis=1).mean(axis=1)
+                if weighting == "equal":
+                    w[j_idx, sel.ravel()] = 1.0 / N
+                else:  # cap
+                    for j in range(n_rebal):
+                        idx   = sel[j]
+                        raw   = bench_weights_mat[j, idx]
+                        total = raw.sum()
+                        w[j, idx] = raw / total if total > 0 else np.full(N, 1.0 / N)
 
-        results.append(SimulationResult(
-            nav_list=nav_list,
-            benchmark_nav=benchmark_nav,
-            mean_nav=mean_nav,
-            N=N, freq=freq, K=K, seed=SEED,
-        ))
+                nav_list.append(engine.calc(pd.DataFrame(w, index=rebal_dates, columns=tickers)).daily)
+
+            mean_nav = pd.concat(nav_list, axis=1).mean(axis=1)
+
+            results.append(SimulationResult(
+                nav_list=nav_list,
+                benchmark_nav=benchmark_nav,
+                mean_nav=mean_nav,
+                N=N, freq=freq, weighting=weighting, K=K, seed=SEED,
+            ))
 
 # ── Generate outputs ──────────────────────────────────────────────────────────
 
