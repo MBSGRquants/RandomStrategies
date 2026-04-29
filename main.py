@@ -8,10 +8,10 @@ import os
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from loader import load_data
-from portfolio_lib import NavEngine
+from loader import load_data # type: ignore
+from portfolio_lib import NavEngine # type: ignore
 from random_strategies.simulation import (
-    SimulationResult, _get_rebalancing_dates, FREQ_RESAMPLE,
+    SimulationResult, _get_rebalancing_dates,
 )
 from random_strategies.visualization import plot_fan_chart, build_summary_table, save_mean_navs, save_all_navs
 

@@ -3,7 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from mb_style import apply_mb_style
+from mb_style import apply_mb_style # type: ignore
 
 from random_strategies.simulation import SimulationResult
 
