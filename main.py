@@ -27,7 +27,7 @@ FREQ_LIST    = ["monthly", "quarterly", "semiannual", "annual"]
 WEIGHT_LIST  = ["equal", "cap"]
 K            = 10000
 SEED         = 42
-OUTPUT_DIR   = "output/"
+OUTPUT_DIR   = r"U:\Gruppo Esperia Comune\Quant Team\Sviluppo\RandomStrategies\output"
 START_YEAR   = 2015
 # ── Load data ─────────────────────────────────────────────────────────────────
 
